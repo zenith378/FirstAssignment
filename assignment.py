@@ -79,16 +79,6 @@ def histog(book):
 	return
 
 
-
-'''
-def charcounter(asci, sentence):
-	minu=sentence.count(char(asci))
-	maius=sentence.count(char(asci-32))
-	frequencies= (minu+maius)/len(book)
-	return frequencies
-	'''
-#book=args.filename
-#if __name__=='__main__':
 dir_path(args.filename)  #command line file exists?
 with open(args.filename, 'r') as f: #if yes read the file
 	books = f.read()
@@ -98,26 +88,6 @@ printfreq(books)
 if args.histo:
 	histog(books)
 
-'''
-MyDict=updatedictionary(book)
-dictionary_items = relative(updatedictionary(book)).items()
-#print(dictionary_items)
-print(sorted(dictionary_items))	
 
-#print(relative(updatedictionary(book)))
-plt.bar(list(MyDict.keys()), MyDict.values(), color='g')
-
-
-
-indices = np.arange(len(dictionary_items))
-plt.bar(indices, frequency, color='r')
-plt.xticks(indices, word, rotation='vertical')
-plt.tight_layout()
-plt.show()
-
-
-df = pd.DataFrame(dictionary_items, columns=['letter', 'frequency'])
-df.plot(kind='bar', x='letter')
-'''
 print("Time of execution: --- %s seconds ---" % (time.time() - start_time))
 
