@@ -3,7 +3,11 @@ import time
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
+from collections import Counter
+from itertools import chain
+import re, string; 
+
+
 start_time = time.time()
 
 
@@ -22,8 +26,8 @@ parser=argparse.ArgumentParser(
 
 parser.add_argument('-f','--filename',  required=True, metavar='', help='input path to txt file of the book')
 parser.add_argument('-H', '--histo', action='store_true', help='display histograms of the frequencies of single letter')
-parser.add_argument('-j', '--jump', action='store_true', help='skip preamble, license and other non-pertainant parts of the book')
 parser.add_argument('-s', '--stats', action='store_true', help='print out the basic book stats')
+parser.add_argument('-j', '--jump', action='store_true', help='jump parts of the text that do not pertain to the book (e.g., preamble and license). ATTENTION: TO THIS FUNCTION TO WORK YOUR FILE MUST HAVE A STRUCTURE LIKE blablabla START OF THE BOOK book END OF THE BOOK other stuff')
 parser.add_argument('-v', '--verbose', action='store_true', help='print out the relative frequencies sorted alphabetically and well formatted.')
 
 
@@ -71,6 +75,9 @@ def printfreq(book):
 		print(updatedictionary(book))
 		return
 
+#def jump(book):
+
+
 def histog(book):
 	MyDict=updatedictionary(book)
 	plt.bar(list(MyDict.keys()), MyDict.values(), color='g')
@@ -79,15 +86,28 @@ def histog(book):
 	return
 
 
+
+
+
 dir_path(args.filename)  #command line file exists?
 with open(args.filename, 'r') as f: #if yes read the file
-	books = f.read()
-#print(book)
+	books = f.read().upper()
+	pattern = re.compile('[^a-zA-Z_]+', re.UNICODE) #
+	books=pattern.sub('', books)
+	counts = Counter(chain.from_iterable(books))
 
+total = sum(counts.values())
+
+
+
+for character, count in counts.items():
+    print('{:<2} - {:>6.2f}%'.format(repr(character)[1:-1], (count/total) * 100))
+#print(book)
+'''
 printfreq(books)
 if args.histo:
 	histog(books)
-
+'''
 
 print("Time of execution: --- %s seconds ---" % (time.time() - start_time))
 
